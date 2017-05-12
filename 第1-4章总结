@@ -1,0 +1,164 @@
+第1-4章总结
+2017.5.7{
+
+	1.html是用UFT-8编码，JavaScript字符集是用UTF-16的Unicode编码
+		2.JavaScript的分号问题，它在解析时会忽略空格（换行符？？），它会自动的解析代码，当该代码解析不通时，加分号，
+		所以，对于上一行和下一行开头的代码，若有歧义，最好加上一个分号（有个比较酷的分号格式：直接在下一行的开头加一个分号，haha，真厉害）
+		然后，对于return break continue 语句没写完就别换行，因为它会直接自动在它们三的换行符处加分号
+		3.JavaScript中的数据类型分类有
+				按原始类型和对象类型分
+					1.原始类型（数值、布尔值、字符串）
+					2.特殊的原始类型（null和undefined）
+					3.对象类型：属性的集合
+							类是对象类型的子类
+							1.普通对象类型：命名值的无序集合
+							2.Array类：带编号的值的有序集合
+							3.函数类：
+							4.Date类
+							5.RegExp类
+							6.Error类
+				按拥有方法和不能拥有方法分：只有null和undefined是不能拥有方法的值
+				按可变类型和不可变类型分：可变类型指值可修改
+																	Array和对象是可变类型
+																	数值，null，undefined，字符串是不可变类型
+		4.overflow、underflow、被0整除都不会报错：
+						overflow：返回正负infinite
+						underflow：返回的"负零"（很少用）
+						被"0"整除：返回infinite
+						0除以0：返回NaN
+		5.Infinite 和NaN是全局变量，只读，Number对象定义的属性也是只读
+										eg.		Number.POSITIVE_INFINITE //只读
+													Nnmber.MIN_VALUE/2	//下溢，返回0
+													-Nnmber.MIN_VALUE/2			//下溢，返回 -0
+													-Number.MIN_VALUE-1		//返回负无穷
+		正0 和负0 用==、===检测时均为TRUE，只是在做除数时不同，然而正infinite和负infinite不等
+		NaN 和自身不等，判断一个数是不是NaN，用isNaN( )  //有个很酷的写法(x != x),当且仅当x为NaN时返回true
+		判断一个数是NaN -Infinite +infinite时，用isFinite( )  ，当不为前面三时返回TRUE
+		6.	s= "我是撑着\‘了\’"		对于不是用来给字符串结尾的单引号要用转义字符\转义
+		7.任何值类型都可转化为布尔类型，转为布尔类型的结果有真值与假值
+					真值：对象、非空字符串、TRUE  等
+					假值：null、undefined、空字符串、0、-0、NaN、false
+					然后判断值是否相等，得出结果
+		8.值的空缺：
+					undefined：类型为undefined，表示未初始化，表示系统级的出乎意料的，错误的值的空缺
+					null：类型为object，表示的含义为"非对象"，通常认为null是自有类型的的唯一一个对象（我理解的是null对象里有一个唯一的叫null的成员）
+							null可以表示数字、字符串、对象的"无值"，用于程序级的，正常的，意料之中的空缺，可赋值给变量、属性或函数的参数传递
+
+}
+2017.5.8{
+
+    1.javascript中有一类非常重要的对象全局对象，全局对象是一类对象，
+    在客户端的JavaScript中是Window对象，它是在浏览器窗口的所有JavaScript代码中充当全局对象，它有个自己的引用叫window，它除了有以上全局属性外
+    还额外自己定义了些全局属性：
+    当JavaScript解释器启动时或浏览器加载新页面时会创建一个新的全局对象，并给定初始属性：
+          1.全局属性：NaN、undefined、infinite
+          2.全局函数：isNaN（）、parseInt（）、eval（）
+          3.构造函数：Object（）、Array（）、String（）、Date（）、RegExp（）
+          4.全局对象：Math和JSON
+    如果是在全局中声明了一个变量，则该变量为该全局对象的一个属性，该属性不可以用delete运算符删除，但是一个未声明的变量会自动转换为全局变量，
+    该全局变量可以用delete删除(用delete删除后，访问该属性会返回undefined，还可以用in运算符查询该属性是否成功删除，delete不能删除通过var出来的变量)
+
+    2.原始值类型变为对象类型：使用时，JavaScript会自动转换，但是也可以显示转换：String（）、Boolean（）、Number（）
+    当原始值变为对象时，会转换为包装对象，包装对象与真正的对象不同，它只可以使用从字符串、数字、布尔对象继承而来的属性，而不能定义新的属性，
+    也可这么理解，举个例子，var s ="ketty"  ;  s.length //js自动将s转为对象类型
+                            s.len =4 //给s包装对象定义了一个叫len的属性，然而重点是该行代码执行完毕，随之便销毁s包装对象，
+                             var  t= s.len 		//s.len 不存在
+
+    3.不可变的原始值（数字、字符串、布尔值、undefined、null）作比较时，是指值的比较，对于可变的对象（数组和函数）的比较是指是否有相同的引用
+        var a = []
+        var b = a			//引用
+        若想得到一个对象或数组的副本，则应该显式复制对象或数组的每一个属性
+        同样，若比较两个单独的对象或数组时必须比较他们的属性或元素，例如：
+              function equalArray(a,b){			//a b 为数组
+                if(a.length != b.length)		return false;
+                for(var i= 0; i<a.length;i++){
+                  if(a[i]  !==  b[i])     return false;
+                  return true
+                  }
+              }
+4.字符串是不可变的，每一次修改后都是返回的一个新的字符串，原本的字符串是不变的
+eg. var s ="hello"
+	 s.toUpperCase()
+	 console.log(s)		//hello
+}
+2017.5.9{
+1. x+""等价于String(x)
+	+x  等价于Number(x) 或 x - 0
+	!!x  等价于Boolean(x)
+2.number to string:   toString()方法
+		eg: 	var n = 17			
+				n.toString(2)		//数字-----》二进制字符串
+				n.toString(8)		//数字-----》八进制字符串，但格式未对齐
+				n.toString(16)	//数字-----》十六进制字符串，但格式未对齐，需要自己处理
+	string  to number:	parseInt()		parseFloat() 	（全局函数）它只解析出字符串中的第一串数字串，可前后尾随字符	
+								Number() 前后不可尾随字符，且只能基于十进制转换
+	不足之处：只能将各个进制的字符串转化为十进制，且传进来的参数十六进制必须要表示成0x？？
+		eg： parseInt("3 blind mice")		//	3
+				parseInt("3.17")				//	3
+				parseInt("0xff")					//	255
+				parseInt(".3")					//	NaN，整数不能以"."开始
+				parseInt("$3")					//	NaN，数字不能以"$"开始
+	当传入两个参数时:	parseInt(a,b)
+				b:	转换基数（2~36），说明a是b进制数，现要转为十进制
+	
+	数字的格式问题解决：返回值均为字符串
+		toFixed(a):将小数点后的数字保留a位,不使用指数记数
+		toExponential(a):使用指数记数，小数点前保留一位，小数点后保留a位
+		toPrecision(a):保留a位数字
+		
+}
+2017.5.10{
+	1.原生对象（native object）转换为原始值
+		所有对象都继承了两个转换方法：toString()和valueOf()
+		eg:	[1,2,3].toString()		//	"1,2,3"
+				(function(x)	{	f(x);	}).toString()		//	"function(x)	{\n	f(x);\n	}"
+				/\d+/g.toString()		//	"/\d+/g"
+				new (2010,0,1).toString()		//	"Fri Jan 01 2010 00:00:00 GMT-0800(PST)"
+				valueOf()方法对于原始值，返回原始值，对于对象、数组、函数、正则返回对象本身，而不是原始值
+				(new Date(2010,0,1)).valueOf()		//1262332800000
+		JavaScript中对象到字符串的转换：
+				1.调用toString()方法，若返回的是原始值则（若原始值不为字符串）将原始值转换为字符串，结束
+				2.否则调用valueOf()方法，若返回的是原始值则（若原始值不为字符串）将原始值转换为字符串，结束
+				3.否则抛出TypeError
+		JavaScript中对象到数字的转换：
+				1.调用valueOf()方法，若返回的是原始值则（若原始值不为数字）将原始值转换为数字，结束
+				2.否则调用toString()方法，若返回的是原始值则（若原始值不为数字）将原始值转换为字符串，结束
+				3.否则抛出TypeError
+	2.	+ == 	!=		和关系运算符存在隐式转换
+	3.在非严格模式下，给一个未声明的变量赋值，则JavaScript会自动将其创建为全局变量（这种习惯不好）
+	4.JavaScript中没有块级作用域的概念，而是函数作用域，在一个函数体内声明的变量，对该函数和其嵌套函数可见，且函数
+	 内部使用函数内部的局部变量会覆盖全局变量。局部变量都会提前在函数顶部声明，而赋值保持在原位置。
+	5.作用域链
+}
+2017.5.11{
+	1.if(a==b)	{	stop()	}	与	(a==b) && stop()	相同
+	2.data[i++] *= 2
+	   上述表达式的同义转换为:
+	   data[i] = data[i] *2
+	   i = i+1
+	
+	   data[i++] =data[i++]*2
+	   上述表达式的同义转换为：
+	   data[i]*2
+	   data[i] = data[i]*2	//此语句完成后再执行右边的i = i + 1，再执行左边的 i = i + 1
+	   i = i + 1
+	   i = i + 1
+	   综上：上述表达式在做循环时结果是不同的，因为表达式1的i值是做+1变化，表达式2的i值是做的+2变化
+	3.console.log(delete 1)		//返回true ,delete希望参数为一个左值，若不是，不作任何操作，返回TRUE
+	4.	void 操作数:  void 运算符的作用在于忽略操作数的计算结果，返回undefined，因此在操作数具有副作用的时候使用void来让程序更加语义化
+		eg： 在客户端的URL（javascript：URL）中，URL可以写带有副作用的表达式，而void则让浏览器不必显示这个表达式的计算结果。
+				<a href ="javascript:void window.open();">打开一个新窗口</a>				、//若通过onclick绑定事件处理程序则void可有可无
+}
+2017.5.12{
+	JavaScript的执行顺序详解：http://www.jb51.net/article/44123.htm	，改变执行顺序常用回调函数
+}
+
+
+
+
+
+
+
+
+
+
