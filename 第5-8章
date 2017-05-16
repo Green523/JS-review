@@ -39,27 +39,28 @@
 		也都会计算它的每个属性的值（如果在一个重复调用的函数体内使用了对象直接量，那么它将创建很多新的对象
 		，并且每次创建的对象属性值可能不同）
 	9.2 new对象		:new 构造函数；javascript中的原始类型都包含有内置构造函数
-插播10.原型：每个Javascript对象（null除外）都有和另一个对象相关联。那个另一个对象就是原型，每一个对象都是从原型继承属性
+	9.3 Object.create()方法创建对象
+			它是一个静态函数
+				var oo = Object.create(原型对象)
+			eg：var oo = Object.create({x:1,y:2})  // oo继承了x,y的属性
+			若想创建一个没有原型的新对象，则向方法传入参数null，则该创建对象不继承任何东西，不继承任何基础方法，如toString()方法。
+			若想创建一个普通的对象则  Object.create(Object.prototype)
+	
+	10.原型：每个Javascript对象（null除外）都有和另一个对象相关联。那个另一个对象就是原型，每一个对象都是从原型继承属性
 				 所有通过直接量来创建的对象都具有同一个原型对象，并可以通过Object.prototype获得对原型对象的引用。
 				 通过 new 构造函数创建的对象的原型就是构造函数的prototype属性值。
 			 没有原型的对象不多，Object.prototype就是其中之一。它不继承任何属性。
 			 大部分的自定义对象和内置对象都有一个继承自object.prototype的原型 。
 			 eg：new Date（）创建的Date对象的都有从Date.prototype 和Object.prototype中继承原型。
 				这一系列链接的原型对象就是“原型链”
+				
+				
+			
 	
 	
 	
 
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+
 		
 		
 		
